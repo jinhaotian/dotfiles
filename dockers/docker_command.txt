@@ -1,0 +1,7 @@
+docker build -t "myserver:8.7" .
+docker run -a STDOUT  -t -i   -v /var/tom8080-playlist:/var/tom8080  --name playlist  -p 8280:8080 -h playlist-mytest-1201.sea2.rhapsody.com myserver:8.7
+docker run -a STDOUT  -t -i   -v /var/tom8080-playlist:/var/tom8080  --name playlist  -p 8280:8080 -h playlist-mytest-1201.sea2.rhapsody.com myserver:8.7
+----------------------------------------
+docker build -t "myserver:6.5" .
+docker run -a STDOUT  -t -i   -v /var/tom8080:/var/tom8080 -v /home/tom8080/java-cache/dynamic-caches:/var/java-cache/dynamic-caches  --name library  -p 8180:8080 -h rds-library-mytest-1201.sea2.rhapsody.com myserver:6.5
+docker run -a STDOUT  -t -i   -v /var/tom8080:/var/tom8080 -v /home/tom8080/java-cache/dynamic-caches:/var/java-cache/dynamic-caches  --name library  -p 8180:8080 -h rds-library-mytest-1201.sea2.rhapsody.com myserver:6.5 bash
