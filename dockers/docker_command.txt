@@ -1,12 +1,75 @@
-docker build -t "myserver:8.7" .
+---------------------------------------------------
+Build Server Image:
+docker build -t "platform/tomcat5" .
+docker build -t "platform/tomcat7" .
+
+----------------------------------------------------
+Build Data Image:
+Create Data Volume
+Playlist
+docker create  \
+       -v  /var/tom8080-playlist/conf:/var/tom8080/conf \
+       -v /var/tom8080-playlist/webapps/playlist.war:/var/tom8080/webapps/playlist.war  \
+       -v  /var/tom8080-playlist/app/config/playlist:/var/tom8080/app/config/playlist \
+       --name playlist-data platform/tomcat7 /bin/true
+Library
+docker create  \
+       -v  /var/tom8080/conf:/var/tom8080/conf \
+       -v /var/tom8080/webapps/rhapsodydirectlibrary.war:/var/tom8080/webapps/rhapsodydirectlibrary.war  \
+       --name library-data platform/tomcat5 /bin/true
+	   
+	   
+--------------------------------------------------
+Run Playlist
+1.  using host volume
 docker run -d  -t -i   -v /var/tom8080-playlist:/var/tom8080  \
        --name playlist  -p 8280:8080 -h playlist-mytest-1201.sea2.rhapsody.com \
-       myserver:8.7
+       platform/tomcat7
+2. using data volument
+docker run -d  -t -i   --volumes-from playlist-data \
+       --name playlist  -p 8280:8080 -h playlist-mytest-1201.sea2.rhapsody.com \
+       platform/tomcat7
+	   
 
 ----------------------------------------
-docker build -t "myserver:6.5" .
+Run Library
+1. using host volumen
 docker run -d  -t -i  -v /var/tom8080:/var/tom8080 \
       -v /home/tom8080/java-cache/dynamic-caches:/var/java-cache/dynamic-caches \
       --name library  -p 8180:8080 -h rds-library-mytest-1201.sea2.rhapsody.com \
       --link playlist:playlist-test-1201.sea2.rhapsody.com \
-      myserver:6.5
+      platform/tomcat5
+
+
+2. docker run -d  -t -i   --volumes-from library-data \
+      -v /home/tom8080/java-cache/dynamic-caches:/var/java-cache/dynamic-caches \
+      --name library  -p 8180:8080 -h rds-library-mytest-1201.sea2.rhapsody.com \
+      --link playlist:playlist-test-1201.sea2.rhapsody.com \
+      platform/tomcat5
+
+-----------------------
+remove
+docker rm playlist-data
+docker rm library-data
+docker rm playlist
+docker rm library
+
+
+
+
+
+
+
+---------------------------------------
+Create Data Volume
+docker create  \
+       -v  /var/tom8080-playlist/conf:/var/tom8080/conf \
+       -v /var/tom8080-playlist/webapps/playlist.war:/var/tom8080/webapps/playlist.war  \
+       -v  /var/tom8080-playlist/app/config/playlist:/var/tom8080/app/config/playlist \
+       --name playlist-data myserver:8.7 /bin/true
+
+
+Run Docker Image using Data Volume	   
+
+
+	

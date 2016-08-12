@@ -24,7 +24,15 @@ RUN curl -s $SOFTWARE_REPO/$JAVA_FILE \
     | tar -xzv -C /usr/local/ 
 
 
-RUN mkdir -p /var/tom8080 &&  mkdir -p /var/tom8080/{bin  conf  logs  temp  webapps  work} && mkdir -p /usr/lib/jvm  \
+RUN mkdir -p /var/tom8080 && \
+           mkdir -p /var/tom8080/bin  && \
+           mkdir -p /var/tom8080/conf && \
+           mkdir -p /var/tom8080/logs && \
+           mkdir -p /var/tom8080/temp && \
+           mkdir -p /var/tom8080/webapps && \
+           mkdir -p /var/tom8080/work
+
+RUN mkdir -p /usr/lib/jvm  \
     && ln -s -T /usr/local/$JAVA_VERSION  $JAVA_HOME && ln -s -T /usr/local/apache-tomcat-$TOMCAT_VERSION $CATALINA_HOME \
     &&  chmod -R 777 /usr/local/apache-tomcat-$TOMCAT_VERSION && chmod -R 777  /usr/local/apache-tomcat-$TOMCAT_VERSION
 
