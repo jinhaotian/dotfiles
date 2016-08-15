@@ -2,6 +2,7 @@
 Build Server Image:
 docker build -t "platform/tomcat5" .
 docker build -t "platform/tomcat7" .
+docker build -t "platform/tomcat666666" .
 
 ----------------------------------------------------
 Build Data Image:
